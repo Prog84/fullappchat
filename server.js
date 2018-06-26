@@ -11,10 +11,10 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
 
-container.resolve(function(users){
+container.resolve(function(users, _){
 
     mongoose.Promise = global.Promise;
-    mongoose.connect('mongodb://localhost/fullappchat', {useMongoClient: true});
+    mongoose.connect('mongodb://localhost/fullappchat');
 
     const app = SetupExpress();
 
@@ -31,17 +31,19 @@ container.resolve(function(users){
         app.use(router);
     }
     function ConfigureExpress(app){
+        require('./passport/passport-local');
         app.use(express.static('public'));
         app.use(cookieParser());
         app.set('view engine', 'ejs');
         app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({extended: true}));
+        app.use(bodyParser.urlencoded({extended: false}));
 
         app.use(validator());
+        
         app.use(session({
             secret: 'mybigsecretkey',
             resave: true,
-            saveInitialized: true,
+            saveUninitialized: false,
             store: new MongoStore({mongooseConnection: mongoose.connection})
         }));
 
@@ -49,5 +51,6 @@ container.resolve(function(users){
 
         app.use(passport.initialize());
         app.use(passport.session());
+        app.locals._ = _;
     }
-});
+}); 
