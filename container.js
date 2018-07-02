@@ -5,7 +5,9 @@ const container = dependable.container();
 
 const simpleDependecies = [
     ['_','lodash'],
-    ['passport','passport']
+    ['passport','passport'],
+    ['formidable','formidable'],
+    ['Group','./models/groups']
 ];
 
 simpleDependecies.forEach(function(val){

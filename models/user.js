@@ -11,11 +11,8 @@ const userSchema = mongoose.Schema({
     fbTokens: Array,
     google: {type: String, default: ''}
 });
-userSchema.methods.encryptPassword = function(password){
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
-};
+userSchema.methods.encryptPassword = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 
-userSchema.methods.validUserPassword = function(password){
-    return bcrypt.compareSync(password, this.password);
-};
+userSchema.methods.validUserPassword = password => bcrypt.compareSync(password, this.password);
+
 module.exports =  mongoose.model('User',userSchema);
